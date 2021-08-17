@@ -4,7 +4,7 @@ Code to solve the nondimensional firn compaction model presented in the, preprin
 
 This paper is unpublished/unreviewed, but will be availible in preprint form soon and a link to the paper will be provided here when it is. 
 
-All code needed to produce the figures from the manuscript is contained in the directory *model*. 
+All code needed to produce the figures from the manuscript is contained in the directory *model*. All the resulting figures are previded as pngs.
 
 Run `plottingScripts.m` to plot and save new versions of all the figures. 
 
