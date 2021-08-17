@@ -1,5 +1,7 @@
 # Firn thickness, grain size, accumulation model
 
+[![DOI](https://zenodo.org/badge/363214644.svg)](https://zenodo.org/badge/latestdoi/363214644)
+
 Code to solve the nondimensional firn compaction model presented in the, preprint article *Grain-size evolution controls the accumulation dependence ofmodeled isothermal firn thickness*. 
 
 This paper is unpublished/unreviewed, but will be availible in preprint form soon and a link to the paper will be provided here when it is. 
