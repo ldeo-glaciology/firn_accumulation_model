@@ -189,20 +189,20 @@ print('-dpng','F4_beta_evolving_rJustFull_v2.png')
 % load results_for_Figure4_4  
 
 %%% for the higher r_s
-N=18;
-% plot(beta,[results_1(:,N).zeta830final],'-g','LineWidth',2)
+N=19;
+% plot(beta,[results_1(:,N).zeta830final],'-r','LineWidth',2)
 p = polyfit(beta,[results_1(:,N).zeta830final],1);
 % hold on
 % xplot = 0:0.1:10;
 % plot(xplot,xplot*p(1)+p(2))
 
 disp(['mean accumulation dependence when r_s = ' num2str(r_s(N)) ' is ' num2str(p(1))])
-%%%% compute the gradient
+%%%% compute the gradient as a function of beta
 G = gradient([results_1(:,N).zeta830final],beta);
 disp(['(varying from ' num2str(G(1)) ' at $\beta$ = ' num2str(beta(1)) ])
 disp([' to ' num2str(G(end)) ' at $\beta$ = ' num2str(beta(end)) ')'])
 
-% ((1-[results_1(2,N).z830final]) - (1-[results_1(1,N).z830final])) /(beta(2)-beta(1))   % just as a check that gradient.m is working correctly, this equals G(1)
+% (results_1(2,N).zeta830final - results_1(1,N).zeta830final) /(beta(2)-beta(1))   % just as a check that gradient.m is working correctly, this equals G(1)
 
 
 %%% for the lower r_s
@@ -211,8 +211,6 @@ N=1;
 p = polyfit(beta,[results_1(:,N).zeta830final],1);
 % plot(xplot,xplot*p(1)+p(2))
 disp(['mean accumulation dependence when r_s = ' num2str(r_s(N)) ' is ' num2str(p(1))])
-
-
 
 
 %%%% compute the gradient

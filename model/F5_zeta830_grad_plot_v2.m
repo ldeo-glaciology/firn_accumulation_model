@@ -31,7 +31,7 @@ load results_for_Figure4_4
 
 %% 3. compute dzeta830db with a linear least-squares fit.   
 for ii =1:size(results_1,2)
-    r_s(ii) = results_1(1,ii).p.r2_s_dim;
+    r_s(ii) = results_1(1,ii).p.r2_s_dim/results_1(1,ii).p.r2_0;
     zeta_830(:,ii) = [results_1(:,ii).zeta830final];
     temp = polyfit(beta',zeta_830(:,ii),1);
     dzeta830db(ii,1) = temp(1);

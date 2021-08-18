@@ -13,7 +13,7 @@ F1_ParametersTableAndFigure_v2    % updated tidied
  
 %% figure 2 (comparison between full model and ODE model results)
 
-F2_full_ode_comparions_v3    % updated tidies
+F2_full_ode_comparions_v3    % updated tidied
 
 %% figure 3 (dependence on accumulation rate with no grain size evolution for the full model and ODE model)
 

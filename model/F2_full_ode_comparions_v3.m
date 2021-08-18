@@ -34,13 +34,13 @@ for rr = 1:length(dz)
     tic;
     Out = FCM9(p);
     RunTime = toc
-    fullModelnoT = [Out.Phi(:,end)'; -Out.Sigma(:,end)'; -Out.W(:,end)';Out.GrainSize(:,end)'; Out.Age(:,end)'];
+    fullModelnoT = [Out.Phi(:,end)'; -Out.Sigma(:,end)'; -Out.W(:,end)'; Out.GrainSize(:,end)'; Out.Age(:,end)'];
     Out.z = flip(p.z_h);   
     
     %%%% 3.1.2 plot full model
     if abs(dz(rr) - dz_ref) < 1e-10    % only plot in one iteration
         Figure2fullModelResults = Out;
-        save Figure2fullModelResults_v2 Figure2fullModelResults
+        save Figure2fullModelResults_v2 Figure2fullModelResults p
         ax1 = nexttile;
         h1 = plot(Out.z,fullModelnoT,'k');              % plot all 6 variables
         text(ax1,-0.13,0.98,'a','units','normalized','FontSize',20)
@@ -139,19 +139,33 @@ print('-dpng','F2_full_ode_comparisons_v5.png')
 
 %% 7. compute some values quoted in the text
 
+%% 8. some numbers for the text
+
+%% How long did it take to reach a steady state?
+%%% (99% of its final values
+load Figure2fullModelResults_v2 
+Out = Figure2fullModelResults; 
+z = Out.z;
+z0 = Out.p.z_0;
+[dt,~] = meshgrid(diff(Out.Time),1:length(z));
+
+I1 = find(all((abs(diff(Out.Phi,1,2))./dt)<1e-3,1),1,'first');
+ssTime = Out.Time(I1);
+format = 'Porosity approaches a steady state (partial phi / partial t < 10^{-3}) after a nondimensional time of %4.3f (%2.1f years).';
+sentenceAboutSteadyState = sprintf(format,ssTime,ssTime*Out.p.t_0/Out.p.spy)  
+
+
 %% detect the inflection point in the steady state phi profile in the full model. 
 % figure (7)
-phi = Figure2fullModelResults.Phi(:,end);
-z = Figure2fullModelResults.z;
-z0 = Figure2fullModelResults.p.z_0;
-% plot(Figure2fullModelResults.z,phi)
-% figure(12)
-% plot(z,phi,z,gradient(phi),z,gradient(gradient(phi)))
-% legend('$\phi$','$\frac{\partial \phi}{\partial z}$','$\frac{\partial^2 \phi}{\partial z^2}$','FontSize',20)
-% ylim([-0.0001 0.0001])
-I = round(length(z)*0.5);
-inflectionPoint = interp1(gradient(gradient(phi(1:I))),z(1:I),0);
-format = 'There is an inflection point in phi at z = %4.3f (nondimensional) (%2.1f m below the surface).';
+phi = Out.Phi(:,end);
+plot(Out.z,phi)
 
+z_mid = z(2:end-1);
+I2 = find(z_mid>0.5);
+d2phidz2 = diff(phi,2);
+inflectionPoint = interp1(d2phidz2(I2),z_mid(I2),0);
+% plot(d2phidz2(I2),z_mid(I2),'.-',0,inflectionPoint,'*')
+% xlim([-0.00001 0.00001])
+format = 'There is an inflection point in phi at z = %4.3f (nondimensional) (%2.1f m below the surface).';
 sentenceAboutInflectionPoint = sprintf(format,inflectionPoint,z0-inflectionPoint*z0)  
 

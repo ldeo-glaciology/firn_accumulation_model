@@ -1,6 +1,6 @@
 function p = FirnSetup3(inputs)
 
-%% parse input arguments
+%% 1. parse input arguments
 arguments
     inputs.b0_mpy (1,1) {mustBeNumeric} = 0.1
     inputs.beta (1,1) {mustBeNumeric} = 1
@@ -11,7 +11,6 @@ arguments
     inputs.plotting_period (1,1) {mustBeNumeric} = 3000
     inputs.sampling_period (1,1) {mustBeNumeric} = 20
     inputs.dz (1,1) {mustBeNumeric} = 0.01
-%     params.dt (1,1) {mustBeNumeric} = 0.00001
     inputs.t_total (1,1) {mustBeNumeric} = 20
     inputs.save_dir (1,:) string = 'results_scratch'
     inputs.save (1,1) {mustBeMember(inputs.save,[0,1])} = 1
@@ -21,52 +20,36 @@ arguments
     inputs.z0 (1,1) {mustBeNumeric} = 100
     inputs.r_s_dim (1,1) {mustBeNumeric} = 2.5000e-07   % grain size at the surface (0.5 mm)^2 
     inputs.phi_s (1,1) {mustBeNumeric} = 0.5   %
-%     params.justScalesParameterCalcs (1,1) {mustBeMember(params.justScalesParameterCalcs,[0,1])} = false
     inputs.n (1,1) {mustBeNumeric} = 1
 end
 
-
-
+%% 2. Define the dimensional parameters of the system.
 %%% N D1 beta xi_p delta lambda_g lambda_c m n Pe Ar
 %%% These are the dimensional parameters in the problem.
-b0_mpy = inputs.b0_mpy;         % ice equivalent accumulation rate [m / yr]
-T_s_dim = inputs.T_s_dim;        % upper surface temperature [K]
+b0_mpy = inputs.b0_mpy;       % ice equivalent accumulation rate [m / yr]
+T_s_dim = inputs.T_s_dim;     % upper surface temperature [K]
 z_0 = inputs.z0;              % initial column height [m]
 dz_dim = inputs.dz*z_0; % dimensional numerical grid spacing [m]
 r2_s_dim = inputs.r_s_dim;      % upper surface grain size [m^2] (0.5 mm)^2 
 r2_f = 0.01^2;          % maximum grain size [m^2] (1 cm)^2 
-phi_s = inputs.phi_s;            % upper surface porosity
+phi_s = inputs.phi_s;   % upper surface porosity
 c_i = 2009;             % heat capacity [J / (kg K)]
 E_c = 60e3;             % compaction activation energy [J]
 E_g = 42e3;             % grain growth activation energy [J]
 k_c = 9.2e-9;           % flow parameter [kg?1 m3 s] from Arthern kc
-k_g = 1.3e-7/r2_f;           % grain growth rate constant [m^2 / s]
+k_g = 1.3e-7/r2_f;      % grain growth rate constant [m^2 / s]
 m = 1;                  % porosity exponent
-n = inputs.n;                  % stress exponent
+n = inputs.n;           % stress exponent
 kappa_0 = 2.1;          % thermal conductivity [W / (m K)], % arthern and wingham 1998 pg. 18
 G = 0.05;               % geothermal heat flux  [W/m^2]
 
-%%% Important constants.
-g = 9.81;
-spy = 24*365*3600;
+%% 3. Constants.
+g = 9.81;                           % acceleration due to gravity [m s^-2]
+spy = 24*365*3600;                  % seconds per year
 R = 8.31;                           % ideal gas constant
 rho_i = 918;                        % ice density [kg / m^3]
 
-%%% Set up real space grid in height coordinates.
-z_init = (z_0: -dz_dim: 0)';
-N = numel(z_init);
-
-%%% Normalized depth coordinates.
-z_h = flip(z_init)/z_0;
-
-%%% Initial porosity, temperature, and grain size.
-phi_init = (z_init/z_0).*phi_s; % THIS GIVES phi = 0 AAT BOTTOM.
-%phi_init = exp(-(flip(z_init)/z_0)).*phi_s;
-%phi_init = phi_s*ones(numel(z_init),1);
-
-%%% Compacted grid. Need to flip z_init to be in depth coordinates.
-xi_init = flip(z_init) - cumtrapz(flip(z_init), phi_init);
-
+%% 4. Scales and parameters
 %%% Scaling parameters.
 b_0 = b0_mpy/spy;
 h_0 = z_0;
@@ -84,9 +67,18 @@ Ar = r2_0/(k_c*t_0*sigma_0^n*exp(-E_c/(R*T_s_dim)))/gamma; % Arthern number
 Fl = h_0*G/(kappa_0*T_0);
 Pe = rho_i*c_i*b_0*h_0/kappa_0;
 beta = inputs.beta;
-% correction, JK, Aug 6th:
-% delta = r2_s_dim/r2_f; % replaced with:
 delta = r2_0/r2_f;
+
+%% 5. Set up real space grid in height coordinates
+z_init = (z_0: -dz_dim: 0)';
+N = numel(z_init);
+
+%%% Normalized depth coordinates.
+z_h = flip(z_init)/z_0;
+
+%% 6. Initial conditions
+%%% Initial porosity, temperature, and grain size.
+phi_init = (z_init/z_0).*phi_s; % THIS GIVES phi = 0 AAT BOTTOM.
 
 w_s = beta/(1 - phi_s);
 
@@ -100,79 +92,28 @@ else
 end
     
 %%% Dimensionless initial temperature and grain size squared.
-%T_hat_init = (T_init - T_s)/T_0;
 T_hat_init = zeros(size(z_init));
 r2_hat_init = r2_init/r2_0;
 
-%%% xi_p is the normalized compacted coordinate.
-xi_p = xi_init/xi_init(end);
-dxi_p = xi_p(2) - xi_p(1);
-
 %%% Dimensionless initial stress.
 sigma_hat_init = cumtrapz(z_h, 1 - phi_init);
-% sigma_hat_init = cumsimps(z_h, 1 - phi_init);
 
-%%% Dimensionless firn age.
+%%% Dimensionless initial  age.
 A_s = 0;
 A_hat_init = linspace(A_s, 1, numel(z_init))';
 
 %%% Initial conditions vector.
 Vars_init = [phi_init; r2_hat_init; sigma_hat_init; A_hat_init; T_hat_init];
 
+%% 7. Define gradient operator
 %%% Finite difference gradient operator using three point upwind scheme.
-%D1 = three_point_upwind_uni_D1(z_h(1), z_h(end), N, 1);
 D1 = two_point_upwind_uni_D1(z_h(1), z_h(end), N, 1);
-%D1 = three_point_centered_uni_D1(z_h(1), z_h(end), N);
-%D2 = three_point_centered_uni_D2(z_h(1), z_h(end), N);
 
-
-%%% Collect all the parameters into a structure 'p'.
-%%% p.D ---- collects all parameters that are dimensionless.
-%%% p.U ---- collects all parameters that have units.
-%%% p.U.S -- collects all scaling parameters.
-%%% p.N ---- collects all parameters for numerical routine.
-
-% p.D.ArthernNumber = Ar;
-% p.D.FluxNumber = Fl;
-% p.D.PecletNumber = Pe;
-% p.D.PorosityExponent = m;
-% p.D.StressExponent = n;
-% p.D.beta = beta;
-% p.D.delta = delta;
-% p.D.lambda_c = lambda_c;
-% p.D.lambda_g = lambda_g;
-
-% p.U.AcummRate = b0_mpy;
-% p.U.SurfaceTemp = T_s;
-% p.U.SurfaceR2 = r2_s;
-% p.U.MaxR2 = r2_f;
-% p.U.SurfacePhi = phi_ws;
-% p.U.HeatCapacity = c_i;
-% p.U.CompActEnergy = E_c;
-% p.U.GrainActEnergy = E_g;
-% p.U.FlowParameter = k_c;
-% p.U.GrainGrowth = k_g;
-% p.U.ThermalCond = kappa_0;
-% p.U.Geotherm = G;
-
-% p.U.S.b_0 = b_0;
-% p.U.S.h_0 = h_0;
-% p.U.S.t_0 = t_0;
-% p.U.S.T_0 = T_0;
-% p.U.S.T_s = T_s;
-
-% p.N.GridNumber = N;
-% p.N.Gradient1 = D1;
-% p.N.Gradient2 = D2;
-% p.N.xi_p = xi_p;
-% p.N.dxi_p = dxi_p;
-% P.N.InitialConditions = Vars_init;
-
+%% 8. Save outputs for use at the solution stage
 p.GridNumber = N;
 p.Gradient = D1;
+p.spy = spy;
 p.beta = beta;
-p.xi_p = xi_p;
-p.dxi_p = dxi_p;
 p.delta = delta;
 p.lambda_c = lambda_c;
 p.lambda_g = lambda_g;
