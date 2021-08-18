@@ -11,12 +11,14 @@ All code needed to produce the figures from the manuscript is contained in the d
 All code runs in Matlab 9.7 (and probably most other matlab versions) and does not require any toolboxes.
 
 ---
+
 Run `plottingScripts.m` to plot and save new versions of all the figures. The code was 
 
 For example, Fig. 2:
-![figure 2](exampleFig2.png)
+![figure 2](https://github.com/ldeo-glaciology/firn_accumulation_model/raw/main/model/F2_full_ode_comparisons_v5.png)
 ---
-###Acknowledgements
+### Acknowledgements
+
 Thank you to <https://github.com/foxelas> for `table2latex.m`:
 
 Eleni Aloupogianni (2021). TABLE2LATEX (https://github.com/foxelas/Matlab-assisting-functions/releases/tag/v1.1), GitHub. Retrieved August 18, 2021.
