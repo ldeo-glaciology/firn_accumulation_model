@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/363214644.svg)](https://zenodo.org/badge/latestdoi/363214644)
 
-Code to solve the nondimensional firn compaction model presented in the preprint article *Grain-size evolution controls the accumulation dependence ofmodeled isothermal firn thickness*. 
+Code to solve the nondimensional firn compaction model presented in the preprint article *Grain-size evolution controls the accumulation dependence of modeled isothermal firn thickness*. 
 
 This paper is unpublished/unreviewed, but will be availible in preprint form soon and a link to the paper will be provided here when it is. 
 
@@ -11,8 +11,7 @@ All code needed to produce the figures from the manuscript is contained in the d
 All code runs in Matlab 9.7 (and probably most other matlab versions) and does not require any toolboxes.
 
 ---
-
-Run `plottingScripts.m` to plot and save new versions of all the figures. The code was 
+Run `plottingScripts.m` to plot and save new versions of all the figures.
 
 For example, Fig. 2:
 ![figure 2](https://github.com/ldeo-glaciology/firn_accumulation_model/raw/main/model/F2_full_ode_comparisons_v5.png)
