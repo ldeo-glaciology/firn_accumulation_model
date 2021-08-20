@@ -10,6 +10,6 @@ function dydz = odeSigW(zeta,y,n,m,Ar,r,beta)
 
 % y(1) --> phi
 
-dydz = -zeta^n*y(1)^m/Ar/beta/r;
+dydz = -zeta^n*y(1)^m*(1-y(1))/Ar/beta/r;
 
 end

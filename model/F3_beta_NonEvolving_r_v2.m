@@ -94,7 +94,7 @@ for jj = 1:length(beta)
     
     %%%% 2.4.3 compute z830
     zeta830_ODE2(jj) = interp1(y_ODE2(:,1),zeta,1-830/p.rho_i);
-    
+
 end
 
 %% 3. plot the insets
@@ -116,6 +116,8 @@ hold(inset3,'on')
 plot(inset3,beta,[results_1.zeta830final],'.:k')
 plot(inset3,beta,zeta830_ODE1,'.:k')
 plot(inset3,beta,zeta830_ODE2,'.-k','LineWidth',1)
+
+
 
 %% 4. finish plots
 axs = [ax1; ax2; ax3; ax4; ax5; ax6];
@@ -171,7 +173,7 @@ ax5.Box = 1;
 ax6.Box = 1;
 
 %% 5. print figure
-print('-dpng','F3_beta_NonEvolving_r_v2.png')
+print('-dpng','F3_beta_NonEvolving_r_v3.png')
 
 %% 6. additional values quoted in text
 % dimensional grain radius at the surface =
