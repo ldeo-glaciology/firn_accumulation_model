@@ -35,7 +35,7 @@ T_s_dim = 273.15 - [0 20 40];
 % loop over these values
 clear p temp
 for rr = 1:3   
-    p(rr) = FirnSetup3('b0_mpy',b_mpy(rr),'T_s_dim',T_s_dim(rr));     
+    p(rr) = FirnSetup4('b0_mpy',b_mpy(rr),'T_s_dim',T_s_dim(rr));     
 end  
 
 
@@ -73,7 +73,7 @@ T_s_dim = Tm - [0:1:40];
 
 for rr = 1:length(b_mpy)
     for ss = 1:length(T_s_dim)
-        p = FirnSetup3('b0_mpy',b_mpy(rr),'T_s_dim',T_s_dim(ss));
+        p = FirnSetup4('b0_mpy',b_mpy(rr),'T_s_dim',T_s_dim(ss));
         delta(rr,ss) = p.delta;
         Ar(rr,ss) = p.ArthenNumber;
         Pe(rr,ss) = p.PecletNumber;
@@ -107,4 +107,4 @@ text(ax1,-0.06,1.06,'a','units','normalized','FontSize',20)
 text(ax2,-0.06,1.06,'b','units','normalized','FontSize',20)
 
 %% 5. print figure
-print('-dpng','F1_parameterPlots_v3.png') 
+print('-dpng','F1_parameterPlots_v4.png') 
