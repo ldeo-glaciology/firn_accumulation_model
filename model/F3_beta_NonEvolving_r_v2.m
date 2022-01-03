@@ -26,9 +26,9 @@ ax4 = nexttile;    ylabel('velocity, $w(\zeta)$')
 ax5 = nexttile;    ylabel('porosity, $\phi(\zeta)$');  xlabel('depth, $\zeta$ ');
 ax6 = nexttile;    ylabel('velocity, $w(\zeta)$'); xlabel('depth, $\zeta$ ');
 
-inset1 = axes('Position',[0.11     0.826   0.2031    0.1409]);
-inset2 = axes('Position',[0.11    0.505   0.2031    0.1409]);
-inset3 = axes('Position',[0.11     0.18    0.2031   0.1409]);
+inset1 = axes('Position',[0.2718    0.8121    0.2031    0.1409]);
+inset2 = axes('Position',[0.2718     0.505    0.2031    0.1409]); 
+inset3 = axes('Position',[0.2718     0.18     0.2031    0.1409]);
 
 
 h1 = []; h2 = []; h3 = []; h4 = [];h5 = []; h6 = [];
@@ -51,16 +51,17 @@ for jj = 1:length(beta)
     
     %%% 2.1 full model (r(z,t)=r_s)   
     %%%% 2.1.1 run full model
-    p = FirnSetup3('beta',beta(jj),'sim_r',false);
+    p = FirnSetup4('beta',beta(jj),'sim_r',false);
     tic;
-    results_1(jj)  = FCM9(p);
+    results_1(jj)  = FCM9b(p);
     RunTime = toc;
     
     %%%% 2.1.1 pot full model
     hold(ax1,'on')
-    h1 = [h1;  plot(ax1,results_1(jj).z,results_1(jj).Phi(:,end),'k')];
+    finalDepth = p.z_h*results_1(jj).H(end);
+    h1 = [h1;  plot(ax1,finalDepth,results_1(jj).Phi(:,end),'k')];
     hold(ax2,'on')
-    h2 = [h2; plot(ax2,results_1(jj).z,-results_1(jj).W(:,end),'k')];
+    h2 = [h2; plot(ax2,finalDepth,-results_1(jj).W(:,end),'k')];
     
     %%% 2.3 ODE model with \sigma = -zeta
     %%%% 2.3.1 run ODE model 1
@@ -71,13 +72,13 @@ for jj = 1:length(beta)
     n=1; m=1;
     options = odeset('RelTol',1e-10,'AbsTol',1e-10);
     [zeta,y_ODE1] = ode45(@(x,y) odeSig(x,y,n,m,Ar,r_s) ,p.z_h,[phi_s -beta(jj)/(1-phi_s)],options);
-    z=flip(zeta);
+%     z=flip(zeta);
     
     %%%% 2.3.2 plot ODE model 1
     hold(ax3,'on')
-    h3 = [h3; plot(ax3,z,y_ODE1(:,1),'k')];
+    h3 = [h3; plot(ax3,zeta,y_ODE1(:,1),'k')];
     hold(ax4,'on')
-    h4 = [h4; plot(ax4,z,y_ODE1(:,2),'k')];
+    h4 = [h4; plot(ax4,zeta,y_ODE1(:,2),'k')];
     
     %%%% 2.3.3 compute z830
     zeta830_ODE1(jj) = interp1(y_ODE1(:,1),zeta,1-830/p.rho_i);
@@ -88,9 +89,9 @@ for jj = 1:length(beta)
     
     %%%% 2.4.2 plot ODE model 2
     hold(ax5,'on')
-    h5 = [h5; plot(ax5,z,y_ODE2(:,1),'k')];
+    h5 = [h5; plot(ax5,zeta,y_ODE2(:,1),'k')];
     hold(ax6,'on')
-    h6 = [h6; plot(ax6,z,z*0-beta(jj),'k')];
+    h6 = [h6; plot(ax6,zeta,zeta*0-beta(jj),'k')];
     
     %%%% 2.4.3 compute z830
     zeta830_ODE2(jj) = interp1(y_ODE2(:,1),zeta,1-830/p.rho_i);
@@ -123,11 +124,8 @@ plot(inset3,beta,zeta830_ODE2,'.-k','LineWidth',1)
 axs = [ax1; ax2; ax3; ax4; ax5; ax6];
 ylim(axs([1 3 5]),[0 0.5])
 ylim(axs([2 4 6]),[-20 0.5])
-ylabel(ax1,'porosity, $\phi(z)$')
-ylabel(ax3,'porosity, $\phi(z)$')
-ylabel(ax5,'porosity, $\phi(z)$')
-xlabel(ax5,'nondimensional height, $z$ ')
-xlabel(ax6,'nondimensional height, $z$ ')
+xlabel(ax5,'nondimensional depth, $\zeta$')
+xlabel(ax6,'nondimensional depth, $\zeta$')
 
 ylabel(inset1,'$\zeta_{830}$')
 xlabel(inset1,'$\beta$')
