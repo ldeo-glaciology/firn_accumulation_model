@@ -37,7 +37,7 @@ h1 = []; h2 = []; h3 = []; h4 = [];h5 = []; h6 = [];
 %% 2. define beta vector
 % beta
 N = 20;
-D = 3;
+D = 1;
 p1 = 0.5; p2 =10; 
 beta = p1 + (p2-p1)*linspace(0,1,N).^D;
 
@@ -54,7 +54,7 @@ for jj = 1:length(beta)
     p = FirnSetup4('beta',beta(jj),'sim_r',false);
     tic;
     results_1(jj)  = FCM9b(p);
-    RunTime = toc;
+    RunTime = toc
     
     %%%% 2.1.1 pot full model
     hold(ax1,'on')
@@ -171,7 +171,7 @@ ax5.Box = 1;
 ax6.Box = 1;
 
 %% 5. print figure
-print('-dpng','F3_beta_NonEvolving_r_v3.png')
+print('-dpng','F3_beta_NonEvolving_r_v4.png')
 
 %% 6. additional values quoted in text
 % dimensional grain radius at the surface =
