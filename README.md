@@ -9,12 +9,33 @@ All matlab code needed to run the model and produce the figures and save them as
 
 All code runs in Matlab 9.7 (and probably most other matlab versions) and does not require any toolboxes.
 
----
-Run `plottingScripts.m` ([here](https://github.com/ldeo-glaciology/firn-compaction/blob/d54619ee266640860a0d52bda4bb078c01e34a70/plottingScripts.m)) to plot and save new versions of all the figures.
 
-By default this will run some of the simulations again, but many of the results will be loaded from .mat files saved in the directory *savedResults*. 
+---
+
+### Downloading and running the code
+The fastest way to download and run this code is to clone the repo, go into the directory and run the main plotting script ([plottingScripts.m](https://github.com/ldeo-glaciology/firn-compaction/blob/d54619ee266640860a0d52bda4bb078c01e34a70/plottingScripts.m)), as follows.
+
+In Matlab run
+
+```
+! git clone git@github.com:ldeo-glaciology/firn_accumulation_model.git
+cd firn_accumulation_model
+plottingScripts
+
+```
+This takes about 2 minutes on my Mac book air.
+
+By default [plottingScripts.m](https://github.com/ldeo-glaciology/firn-compaction/blob/d54619ee266640860a0d52bda4bb078c01e34a70/plottingScripts.m) will run some of the simulations again, but many of the results will be loaded from .mat files saved in the directory *savedResults*. 
 
 If instead you want to rerun all the simulations change `rerun = 0` to `rerun = 1` in [this](https://github.com/ldeo-glaciology/firn-compaction/blob/d54619ee266640860a0d52bda4bb078c01e34a70/plottingScripts.m#L7) line in [plottingScripts.m](https://github.com/ldeo-glaciology/firn-compaction/blob/d54619ee266640860a0d52bda4bb078c01e34a70/plottingScripts.m), then run the script.
+
+Note that, depending on how you have git setup on your machine you may need to replace the first line above with 
+
+```
+! git clone https://github.com/ldeo-glaciology/firn_accumulation_model.git
+```
+
+Please let us know if you have any questions or suggestions through issues.
 
 ---
 ### Acknowledgements
