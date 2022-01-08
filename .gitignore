@@ -129,3 +129,25 @@ dmypy.json
 .pyre/
 
 
+.DS_Store
+gitAddDependencies.m
+old_scripts/F1_ParametersTableAndFigure_v2.m
+old_scripts/F2_full_ode_comparisons_v3.m
+old_scripts/F3_beta_NonEvolving_r_v2.m
+old_scripts/F4_beta_evolving_r_justFullModel_v2.m
+old_scripts/F4_beta_evolving_r_justFullModel_v3.m
+old_scripts/F5_zeta830_grad_plot_v2.m
+old_scripts/F5_zeta830_grad_plot_v3.m
+old_scripts/F5_zeta830_grad_plot_v4.m
+old_scripts/F6_contours_all_models_v2.m
+old_scripts/F6_contours_all_models_v3.m
+old_scripts/F7_nonlinear_rheology_v2.m
+old_scripts/F7_nonlinear_rheology_v3.m
+old_scripts/F8_thin_thick_plotting_v2.m
+old_scripts/F8_thin_thick_plotting_v3.m
+old_scripts/FCM9.m
+old_scripts/FirnSetup3.m
+old_scripts/FirnSetup4.m
+old_scripts/testing_thinning_thickening.m
+FirnSetup2_originalfromRob.m
+.DS_Store
