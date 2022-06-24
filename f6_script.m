@@ -10,8 +10,8 @@
 % The other two panels are from two different simplified ODE models, which 
 % both have evolving grain size: (odeSig_r and odeSigW_r)
 
-% This version of the code uses the setup scripts from Rob Skarbek's
-% method-of-lines code.
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
 
 %% 1. setup axes
 set(groot,'defaulttextinterpreter','latex');
@@ -64,24 +64,33 @@ contourf(ax2,beta,r_s,zeta830_ODE1','ShowText','on')
 contourf(ax3,beta,r_s,zeta830_ODE2','ShowText','on')
 
 %% 5. finish figure
-text(ax1,-0.11,0.98,'a','units','normalized','FontSize',20)
-text(ax2,-0.11,0.98,'b','units','normalized','FontSize',20)
-text(ax3,-0.11,0.98,'c','units','normalized','FontSize',20)
+% add panel labels
+text(ax1,-0.15,0.98,'a','units','normalized','FontSize',20)
+text(ax2,-0.15,0.98,'b','units','normalized','FontSize',20)
+text(ax3,-0.15,0.98,'c','units','normalized','FontSize',20)
 
-ylabel(ax1,'surface grain size, $r^2_s$','FontSize',15)
-xlabel(ax1,'accumulation rate, $\beta$','FontSize',15)
-ylabel(ax2,'surface grain size, $r^2_s$','FontSize',15)
-xlabel(ax2,'accumulation rate, $\beta$','FontSize',15)
-ylabel(ax3,'surface grain size, $r^2_s$','FontSize',15)
-xlabel(ax3,'accumulation rate, $\beta$','FontSize',15)
+% add axis labels
+ylabel(ax1,'surface grain size, $r^2_s$')
+xlabel(ax1,'accumulation rate, $\beta$')
+ylabel(ax2,'surface grain size, $r^2_s$')
+xlabel(ax2,'accumulation rate, $\beta$')
+ylabel(ax3,'surface grain size, $r^2_s$')
+xlabel(ax3,'accumulation rate, $\beta$')
 
-title(ax1,'full model','FontSize',15)
-title(ax2,'ODE model (Eqn 27) with $\sigma = -z$','FontSize',15)
-title(ax3,'ODE model (Eqn 28) with $\sigma = -z; w = \beta$','FontSize',15)
+% add titles
+title(ax1,'full model','FontSize',18)
+title(ax2,'ODE model (Eqn 26) with $\sigma = -z$','FontSize',18)
+title(ax3,'ODE model (Eqn 27) with $\sigma = -z; w = \beta$','FontSize',18)
 
-caxis(ax2,[0 1])
+% make the color scale the same across panels and figures
 caxis(ax1,[0 1])
+caxis(ax2,[0 1])
 caxis(ax3,[0 1])
+
+% change size of tick labels
+ax1 = axis_font_sizes(ax1,13,17);
+ax2 = axis_font_sizes(ax2,13,17);
+ax3 = axis_font_sizes(ax3,13,17);
 
 %% 6. print figure
 print('-dpng','figures/f6.png')

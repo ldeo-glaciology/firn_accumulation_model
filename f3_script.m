@@ -1,7 +1,13 @@
 %% Plots figure 3 for the manuscript.
 
-% a series of experiments with no grain-size evolution. using the full firn
+% A series of experiments with no grain-size evolution. using the full firn
 % model and two simplifications to the ODE model.
+
+
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
+%    -- added a horizontal line to left panels showing z830
+%    -- added points to the right panels showing z830
 
 set(groot,'defaulttextinterpreter','latex');
 set(groot, 'defaultAxesTickLabelInterpreter','latex');
@@ -26,7 +32,7 @@ inset2 = axes('Position',[0.2718     0.505    0.2031    0.1409]);
 inset3 = axes('Position',[0.2718     0.18     0.2031    0.1409]);
 
 
-h1 = []; h2 = []; h3 = []; h4 = [];h5 = []; h6 = [];
+h1 = []; h2 = []; h3 = []; h4 = [];h5 = []; h6 = []; m1 = []; m2 = []; m3 = [];
 
 
 %% 2. define beta vector
@@ -51,7 +57,7 @@ for jj = 1:length(beta)
     results_1(jj)  = FCM9b(p);
     RunTime = toc
     
-    %%%% 2.1.1 pot full model
+    %%%% 2.1.1 plot full model
     hold(ax1,'on')
     finalDepth = p.z_h*results_1(jj).H(end);
     h1 = [h1;  plot(ax1,finalDepth,results_1(jj).Phi(:,end),'k')];
@@ -77,6 +83,9 @@ for jj = 1:length(beta)
     
     %%%% 2.3.3 compute z830
     zeta830_ODE1(jj) = interp1(y_ODE1(:,1),zeta,1-830/p.rho_i);
+    W_at_z830_ODE1(jj) = interp1(zeta,y_ODE1(:,2),zeta830_ODE1(jj));
+    
+    
     
     %%% 2.4 ODE model 2, with \sigma = -zeta and w = -beta
     %%%% 2.4.1 run ODEmodel 2
@@ -90,6 +99,7 @@ for jj = 1:length(beta)
     
     %%%% 2.4.3 compute z830
     zeta830_ODE2(jj) = interp1(y_ODE2(:,1),zeta,1-830/p.rho_i);
+    W_at_z830_ODE2(jj) = beta(jj);
 
 end
 
@@ -136,13 +146,15 @@ set(ax4,'XTickLabel',[]);
 
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 
+% add titles
 title(ax1,'Full model, no grain growth','FontSize',15)
 title(ax2,'Full model, no grain growth','FontSize',15)
-title(ax3,'ODE model (Eqn 25) with $\sigma = -z$','FontSize',15)
-title(ax4,'ODE model (Eqn 25) with $\sigma = -z$','FontSize',15)
-title(ax5,'ODE model (Eqn 26) with $\sigma = -z$; $w = -\beta$','FontSize',15)
-title(ax6,'ODE model (Eqn 26) with $\sigma = -z$; $w = -\beta$','FontSize',15)
+title(ax3,'ODE model (Eqn 24) with $\sigma = -z$','FontSize',15)
+title(ax4,'ODE model (Eqn 24) with $\sigma = -z$','FontSize',15)
+title(ax5,'ODE model (Eqn 25) with $\sigma = -z$; $w = -\beta$','FontSize',15)
+title(ax6,'ODE model (Eqn 25) with $\sigma = -z$; $w = -\beta$','FontSize',15)
 
+% add panel labels
 text(ax1,-0.11,0.98,'a','units','normalized','FontSize',20)
 text(ax2,-0.11,0.98,'b','units','normalized','FontSize',20)
 text(ax3,-0.11,0.98,'c','units','normalized','FontSize',20)
@@ -150,8 +162,15 @@ text(ax4,-0.11,0.98,'d','units','normalized','FontSize',20)
 text(ax5,-0.11,0.98,'e','units','normalized','FontSize',20)
 text(ax6,-0.11,0.98,'f','units','normalized','FontSize',20)
 
+% increase size of tick labels
+ax1 = axis_font_sizes(ax1,13,17);
+ax2 = axis_font_sizes(ax2,13,17);
+ax3 = axis_font_sizes(ax3,13,17);
+ax4 = axis_font_sizes(ax4,13,17);
+ax5 = axis_font_sizes(ax5,13,17);
+ax6 = axis_font_sizes(ax6,13,17);
+
 % reposition insets
-% set(inset2,'Position',(ax2.Position(2)+ax2.Position(4))-0.01)
 inset1.Position(2) = ax1.Position(2)+0.12;
 inset2.Position(2) = ax3.Position(2)+0.12;
 inset3.Position(2) = ax5.Position(2)+0.12;
@@ -180,9 +199,36 @@ annotation(gcf,'textarrow',[0.789 0.789],...
 annotation(gcf,'textarrow',[0.789 0.789],...
     [0.0700059171597633 0.171597633136095]);
 
+%% add indicators of z830 
+% add horizontal line to the left panels
+plot(ax1,xlim(ax1),[1-830/rho_i 1-830/rho_i],'k')
+plot(ax3,xlim(ax1),[1-830/rho_i 1-830/rho_i],'k')
+plot(ax5,xlim(ax1),[1-830/rho_i 1-830/rho_i],'k')
+
+
+Nb = length(beta);
+ for ii = 1:Nb
+    % the full model
+    finalDepth = p.z_h*results_1(ii).H(end);
+    xplot = results_1(ii).zeta830final;
+    yplot = interp1(finalDepth,results_1(ii).W(:,end),xplot);
+    m1 = [m1; plot(ax2,xplot,yplot,'*k')];
+    
+    % the first ODE model
+    m2 = [m2; plot(ax4,zeta830_ODE1,W_at_z830_ODE1,'*k')];
+    
+    % the second ODE model
+    m3 = [m3; plot(ax6,zeta830_ODE2,W_at_z830_ODE2,'*k')];  % note that this is simply equal to beta
+ end
+ 
+set([m1 m2 m3],'Marker','.')
+  
 %% 5. print figure
 print('-dpng','figures/f3.png')
 % 
 %% 6. additional values quoted in text
 % dimensional grain radius at the surface =
 sqrt(p.r2_s_dim)    % 5.0000e-04 m (0.5 mm is quoted in the manuscript).
+
+
+

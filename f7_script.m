@@ -4,8 +4,8 @@
 % accumulation rate, beta, and surface grain size, r_s. Each contour plot corresponds
 % to a different value of the stress exponent, n (2, 3 and 4). 
 
-% This version of the code uses the setup scripts from Rob Skarbek's
-% method-of-lines code.
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
 
 %% 1. setup axes
 set(groot, 'defaulttextinterpreter','latex');
@@ -51,8 +51,6 @@ save savedResults/f7_results results_1 zeta_830_full r_s beta
 end
 
 %% 4. reload the results of this loop, to save time when replotting
-% (to rerun the results, uncomment the cell above and comment out the load
-% command below, then rerun the whole script.) 
 if ~rerun
     load savedResults/f7_results
 end
@@ -62,26 +60,34 @@ contourf(ax1,beta,r_s,zeta_830_full(:,:,2)','ShowText','on')
 contourf(ax2,beta,r_s,zeta_830_full(:,:,3)','ShowText','on')
 contourf(ax3,beta,r_s,zeta_830_full(:,:,4)','ShowText','on')
 
-
 %% 6. finish figure
-text(ax1,-0.11,0.98,'a','units','normalized','FontSize',20)
-text(ax2,-0.11,0.98,'b','units','normalized','FontSize',20)
-text(ax3,-0.11,0.98,'c','units','normalized','FontSize',20)
+% add panel labels
+text(ax1,-0.15,0.98,'a','units','normalized','FontSize',20)
+text(ax2,-0.15,0.98,'b','units','normalized','FontSize',20)
+text(ax3,-0.15,0.98,'c','units','normalized','FontSize',20)
 
-ylabel(ax1,'surface grain size, $r^2_s$','FontSize',15)
-xlabel(ax1,'accumulation rate, $\beta$','FontSize',15)
-ylabel(ax2,'surface grain size, $r^2_s$','FontSize',15)
-xlabel(ax2,'accumulation rate, $\beta$','FontSize',15)
-ylabel(ax3,'surface grain size, $r^2_s$','FontSize',15)
-xlabel(ax3,'accumulation rate, $\beta$','FontSize',15)
+% add acis labels
+ylabel(ax1,'surface grain size, $r^2_s$')
+xlabel(ax1,'accumulation rate, $\beta$')
+ylabel(ax2,'surface grain size, $r^2_s$')
+xlabel(ax2,'accumulation rate, $\beta$')
+ylabel(ax3,'surface grain size, $r^2_s$')
+xlabel(ax3,'accumulation rate, $\beta$')
 
+% make the color scale the same across panels and figures
 caxis(ax1,[0 1])
 caxis(ax2,[0 1])
 caxis(ax3,[0 1])
 
-title(ax1,'$n$ = 2','FontSize',15)
-title(ax2,'$n$ = 3','FontSize',15)
-title(ax3,'$n$ = 4','FontSize',15)
+% add titles
+title(ax1,'$n$ = 2','FontSize',18)
+title(ax2,'$n$ = 3','FontSize',18)
+title(ax3,'$n$ = 4','FontSize',18)
+
+% change size of tick labels
+ax1 = axis_font_sizes(ax1,13,17);
+ax2 = axis_font_sizes(ax2,13,17);
+ax3 = axis_font_sizes(ax3,13,17);
 
 
 %% 7. print figure

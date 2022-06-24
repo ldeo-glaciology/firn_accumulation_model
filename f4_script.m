@@ -5,8 +5,11 @@
 % contour plot in figure 6a and saves the results then plots three
 % sets of results. 
 
-% This version of the code uses the setup scripts from Rob Skarbek's
-% method-of-lines code.
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
+%    -- added a horizontal line to left panels showing z830
+%    -- added points to the right panels showing z830
+
 
 %% 1. setup axes
 set(groot,'defaulttextinterpreter','latex');
@@ -46,7 +49,7 @@ p1 = 0.001; p2 = 0.1;
 r_s  = p1 + (p2-p1)*linspace(0,1,N).^D;
 r_s_dim = r_s*r0;   % change this into a dimensional surface grain size using, r2_0
 
-%% 3. run the full model while thickening
+%% 3. run the full model with multiple different beta and r_s values
 load rerun rerun
 if rerun
     for ii  = 1:length(r_s_dim)
@@ -68,11 +71,11 @@ end
 if ~rerun
     load savedResults/f4_results
 end
-%% 5. plot three sets of results with the same r_s
+%% 5. plot three sets of results each set has a different r_s, and beta varies within each set
 I = [1 3 21];
 
 % initiate empty arrays for the figure handles. 
-h1 = []; h2 = []; h3 = []; h4 = []; h5 = []; h6 = [];
+h1 = []; h2 = []; h3 = []; h4 = []; h5 = []; h6 = []; m1 = []; m2 = []; m3 = [];
 
 
 for kk = 1:length(beta)   %  plot three sets of results
@@ -133,11 +136,11 @@ xlim(axs,[0 1.2])
 
 
 ylabel(ax1,'porosity, $\phi(z)$')
-ylabel(ax2,'nondimensional velocity, $w(z)$')
+ylabel(ax2,'velocity, $w(z)$')
 ylabel(ax3,'porosity, $\phi(z)$')
-ylabel(ax4,'nondimensional velocity, $w(z)$')
+ylabel(ax4,'velocity, $w(z)$')
 ylabel(ax5,'porosity, $\phi(z)$')
-ylabel(ax6,'nondimensional velocity, $w(z)$')
+ylabel(ax6,'velocity, $w(z)$')
 
 xlabel(ax5,'nondimensional depth, $z$ ')
 xlabel(ax6,'nondimensional depth, $z$ ')
@@ -158,6 +161,7 @@ set(ax4,'XTickLabel',[]);
 
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 
+% add titles
 title(ax1,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(1)),'%4.3f')],'FontSize',15)
 title(ax2,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(1)),'%4.3f')],'FontSize',15)
 title(ax3,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(2)),'%4.2f')],'FontSize',15)
@@ -165,12 +169,21 @@ title(ax4,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(2)),'%4.2
 title(ax5,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(3)),'%4.1f')],'FontSize',15)
 title(ax6,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(3)),'%4.1f')],'FontSize',15)
 
+% label panels
 text(ax1,-0.11,1,'a','units','normalized','FontSize',20)
 text(ax2,-0.11,1,'b','units','normalized','FontSize',20)
 text(ax3,-0.11,1,'c','units','normalized','FontSize',20)
 text(ax4,-0.11,1,'d','units','normalized','FontSize',20)
 text(ax5,-0.11,1,'e','units','normalized','FontSize',20)
 text(ax6,-0.11,1,'f','units','normalized','FontSize',20)
+
+% change size of tick labels
+ax1 = axis_font_sizes(ax1,13,17);
+ax2 = axis_font_sizes(ax2,13,17);
+ax3 = axis_font_sizes(ax3,13,17);
+ax4 = axis_font_sizes(ax4,13,17);
+ax5 = axis_font_sizes(ax5,13,17);
+ax6 = axis_font_sizes(ax6,13,17);
 
 % reposition insets
 inset1.Position(2) = ax1.Position(2)+0.12;
@@ -186,11 +199,44 @@ ax4.Box = 1;
 ax5.Box = 1;
 ax6.Box = 1;
 
+
+%% add indicators of z830 
+rho_i = 918;
+
+% add horizontal line to the left panels
+plot(ax1,xlim(ax1),[1-830/rho_i 1-830/rho_i],'k')
+plot(ax3,xlim(ax1),[1-830/rho_i 1-830/rho_i],'k')
+plot(ax5,xlim(ax1),[1-830/rho_i 1-830/rho_i],'k')
+
+
+Nb = length(beta);
+ for ii = 1:Nb
+    % the full model small grain size (top row)
+    finalDepth = p.z_h*results_1(ii,I(1)).H(end);
+    xplot = results_1(ii,I(1)).zeta830final;
+    yplot = interp1(finalDepth,results_1(ii,I(1)).W(:,end),xplot);
+    m1 = [m1; plot(ax2,xplot,yplot,'.k')];
+    
+    % the full model middle grain size (middle row)
+    finalDepth = p.z_h*results_1(ii,I(2)).H(end);
+    xplot = results_1(ii,I(2)).zeta830final;
+    yplot = interp1(finalDepth,results_1(ii,I(2)).W(:,end),xplot);
+    m2 = [m2; plot(ax4,xplot,yplot,'.k')];
+
+     % the full model large grain size (bottom row)
+    finalDepth = p.z_h*results_1(ii,I(3)).H(end);
+    xplot = results_1(ii,I(3)).zeta830final;
+    yplot = interp1(finalDepth,results_1(ii,I(3)).W(:,end),xplot);
+    m3 = [m3; plot(ax6,xplot,yplot,'.k')];
+end
+ 
+set([m1 m2 m3],'Marker','.')
+
+
 %% 8. print figure
 print('-dpng','figures/f4.png')
 
 %% 9. compute some values quoted in the text
-
 
 %%% for the higher r_s
 N=21;

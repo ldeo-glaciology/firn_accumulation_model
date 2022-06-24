@@ -10,6 +10,8 @@
 % This version of the code uses the setup scripts from Rob Skarbek's
 % method-of-lines code.
 
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
 
 %% 1. setup axes
 clear
@@ -149,6 +151,18 @@ h3(2).LineStyle = '--'; h3(2).LineWidth = 3;
 h3(3).LineStyle = '-.'; h3(3).LineWidth = 1;
 h3(4).LineStyle = '--'; h3(4).LineWidth = 1;
 h3(5).LineStyle = '-';  h3(4).LineWidth = 1;
+
+
+% increase size of tick labels
+ax1.XAxis.FontSize = 13;
+ax1.XLabel.FontSize = 16;
+ax1.YAxis.FontSize = 13;
+ax1.YLabel.FontSize = 16;
+ax2.XAxis.FontSize = 13;
+ax2.XLabel.FontSize = 16;
+ax2.YAxis.FontSize = 13;
+ax2.YLabel.FontSize = 16;
+
 
 set(gcf,'Color','w')
 % set(findall(gcf,'-property','FontSize'),'FontSize',12)

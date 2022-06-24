@@ -7,8 +7,8 @@
 % get the the rate of change of z_830 with beta.
 
 
-% This version of the code uses the setup scripts from Rob Skarbek's
-% method-of-lines code.
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
 
 %% 1. setup axes
 clear 
@@ -44,8 +44,13 @@ hold on
 scatter(ax1,r_s,dzeta830db,20,'r','filled')
 
 %% 5. finish figure
-xlabel(ax1,'nondimensional surface grain size, $r^2_s$','FontSize',12)
-ylabel(ax1,'mean dependence of firn thickness on $\beta$','FontSize',12)
+xlabel(ax1,'surface grain size, $r^2_s$')
+ylabel(ax1,{'mean dependence of firn', 'thickness on $\beta$'})
+
+% change size of tick labels
+ax1 = axis_font_sizes(ax1,13,17);
+
+
 
 %% 6. print figure
 print('-dpng','figures/f5.png')

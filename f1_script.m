@@ -12,6 +12,10 @@
 % This version of the code uses the setup scripts from Rob Skarbek's
 % method-of-lines code to get the values of the parameters and scales. 
 
+
+% Modified in response to reviewer comments:
+%    -- increased font size on figure axis labels and tick labels
+
 %% 1. setup axes
 
 set(groot,'defaulttextinterpreter','latex');
@@ -87,26 +91,36 @@ else
 end
 
 %% 5. plot the figure
-
 %%% panel A: alpha
 contourf(ax1,T_s_dim,b_mpy,(Ar),'ShowText','on')
 set(ax1,'YDir','normal','YScale','log')
-ylabel(ax1,'surface accmulation scale, $b_0$ [m yr$^{-1}]$','interpreter','latex','FontSize',12);
-xlabel(ax1,'surface temperature, $T_s$ [K]','interpreter','latex','FontSize',12);
-title(ax1,'compaction number, $\alpha$')
+ylabel(ax1,'surface accmulation scale, $b_0$ [m yr$^{-1}]$','interpreter','latex');
+xlabel(ax1,'surface temperature, $T_s$ [K]','interpreter','latex');
+title(ax1,'compaction number, $\alpha$','FontSize',15)
 ylim(ax1,[1e-2, 1])
 xlim(ax1,[233 273.15])
 
 %%% panel B: delta
 contourf(ax2,T_s_dim,b_mpy,log10(delta),'ShowText','on')
 set(ax2,'YDir','normal','YScale','log')
-xlabel('surface temperature, $T_s$ [K]','interpreter','latex','FontSize',12);
-title(ax2,'logarithm of grain size saturation ratio, log$_{10}\delta$')
+xlabel('surface temperature, $T_s$ [K]','interpreter','latex');
+title(ax2,'logarithm of grain size saturation ratio, log$_{10}\delta$','FontSize',15)
 ylim([1e-2, 1])
 xlim([233 273.15])
 
-text(ax1,-0.06,1.06,'a','units','normalized','FontSize',20)
-text(ax2,-0.06,1.06,'b','units','normalized','FontSize',20)
+% increase size of tick labels
+ax1.XAxis.FontSize = 12;
+ax1.XLabel.FontSize = 15;
+ax1.YAxis.FontSize = 12;
+ax1.YLabel.FontSize = 15;
+ax2.XAxis.FontSize = 12;
+ax2.XLabel.FontSize = 15;
+ax2.YAxis.FontSize = 12;
+ax2.YLabel.FontSize = 15;
+
+% add panel labels
+text(ax1,-0.08,1.06,'a','units','normalized','FontSize',20)
+text(ax2,-0.08,1.06,'b','units','normalized','FontSize',20)
 
 %% 5. print figure
 print('-dpng','figures/f1.png') 
