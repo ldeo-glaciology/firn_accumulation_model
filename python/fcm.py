@@ -47,8 +47,9 @@ class fcm:
         import numpy as np
         result_datasets = []                            # create an empty list to contain all the separate results xarray.datasets
         for x in param_values:                          # loop over the values of the parameter 
+            print('Running model with ' + str(param_to_vary) + ' = ' + str(x))
             keywords_to_pass = {param_to_vary: x}       # construct a dictionary to pass to the solver with the appropriate parameter name and value
-            self.run(**keywords_to_pass, **kwargs)      # run the solver
+            self.run(print_messages = False, **keywords_to_pass, **kwargs)      # run the solver
             if save_all_timesteps:                  
                 result_datasets.append(self.results)    # iteratively append the dataset into the list created above, if save_all_timesteps = True, then keep all the timesteps
             else:
@@ -75,12 +76,9 @@ class fcm:
 
         '''
         
-        
-        print('*** Starting setup.')
         import numpy as np
-
         self.p = {}
-        print('*** Defining default parameters.')
+
         # 1. define default paramaters   
         self.p['sim_label'] = 'default_label'
         self.p['b0_mpy'] = 0.1
@@ -101,14 +99,23 @@ class fcm:
         self.p['m'] = 1
         self.p['simDuration'] = 4
         self.p['scaleDuration'] = False
-        self.p['interp_on_reg_z'] = False # other options are 'add' and 'replace'
+        self.p['interp_on_reg_z'] = False 
+        self.p['print_messages']   = True
+
+
 
 
         # 2. Replace any parameters that are defined by the user (in kwargs) 
         for key, values in kwargs.items():
-            print(' ---- overwriting ', key, ' with a user-defined value of', str(values), '.')
+            if 'print_messages' in locals() and print_messages == True:
+                print(' ---- overwriting ', key, ' with a user-defined value of', str(values), '.')
             self.p[key] = values     
-            
+
+
+        if self.p['print_messages']:
+            print('*** Starting setup.')
+ 
+
         # 3. Define (or extract from self.p) the dimensional parameters of the system.
         b0_mpy = self.p['b0_mpy']        # ice equivalent accumulation rate [m / yr]
         T_s_dim = self.p['T_s_dim']      # upper surface temperature [K]
@@ -173,8 +180,6 @@ class fcm:
 
         ### Normalized depth coordinates.
         z_h = np.flip(z_init)/z_0 
-        #print(len(z_h))
-
 
         ## 6.1. time span
         simDuration = self.p['simDuration']
@@ -233,7 +238,8 @@ class fcm:
         self.p['z_h'] = z_h
         self.p['w_s'] = w_s
 
-        print('*** Setup complete.')     
+        if self.p['print_messages']:
+            print('*** Setup complete.')     
 
     
         from scipy import integrate
@@ -245,14 +251,16 @@ class fcm:
 
         ### main integration step
         st = time.time()   # record start time
-        print('*** Starting integration.')
+        if self.p['print_messages']:
+            print('*** Starting integration.')
         sol = integrate.solve_ivp(self.eqns, self.p['t_span'], self.p['y0']);    # need to change back to self.eqns
         et = time.time()    # record end time
         elapsed_time = et - st    # get exectuion time
-        if sol.status == 0:
-            print('*** Succesfully finished integration in ', elapsed_time, 'seconds.')
-        else:
-            warnings.warn('*** Integrator failed to find a solution.')
+        if self.p['print_messages']:
+            if sol.status == 0:
+                print('*** Succesfully finished integration in ', elapsed_time, 'seconds.')
+            else:
+                warnings.warn('*** Integrator failed to find a solution.')
         
         ### Collect the variables.
         phi = sol.y[:-1:4]
@@ -263,7 +271,8 @@ class fcm:
         t = sol.t
         
         ### post-processing
-        print('*** Post-processing.')
+        if self.p['print_messages']:
+            print('*** Post-processing.')
 
         ### compute density from porosity
         rho = self.p['rho_i']*(1 - phi)        
@@ -278,6 +287,7 @@ class fcm:
         z_h = self.p['z_h']
         lambda_c = self.p['lambda_c']
         w_s = self.p['w_s']
+        z0 = self.p['z0']
 
         ### compute velocity, mass, firn air content and firn thickenss
         W = np.empty_like(phi)         # velocity
@@ -292,11 +302,11 @@ class fcm:
             W_int = -(Height[i]/Ar)*Sigma**n*phi[:,i]*m*np.exp(lambda_c*T[:,i])/r2[:,i]
             W[:,i] = integrate.cumulative_trapezoid(W_int, z_h, initial=0) + w_s
         ### Compute total mass in the column.
-            M[i] = integrate.trapezoid(1 - phi[:,i], z[:,i])
+            M[i] = integrate.trapezoid(1 - phi[:,i], z[:,i]*z0)
         ### Compute firn air content
-            FAC[i] = integrate.trapezoid(phi[:,i], z[:,i])
+            FAC[i] = integrate.trapezoid(phi[:,i], z[:,i]*z0)
         ### Compute the firn thickness 
-            f = interpolate.interp1d(phi[:,i],z[:,i]/self.p["h_0"], bounds_error=False)
+            f = interpolate.interp1d(phi[:,i],z[:,i], bounds_error=False)
             z830[i] = f(1-830/self.p["rho_i"])
 
         ### Create output xarray
@@ -394,7 +404,8 @@ class fcm:
 
         # interpolate onto regular vertical grid, z
         if self.p['interp_on_reg_z'] == True:
-            print('**** interpolating onto regular vertical grids')
+            if self.p['print_messages']:
+                print('**** interpolating onto regular vertical grids')
             self.interp_regular_z(var_name = 'phi')
             self.interp_regular_z(var_name = 'rho')
             self.interp_regular_z(var_name = 'r2')
@@ -520,10 +531,9 @@ class fcm:
 
         name_for_new_var = var_name + '_' + str(depth_to_interp)
 
-
         interpolated_values = np.empty_like(self.results.t.values)
         for i in range(len(self.results.t.values)):
-            f = interpolate.interp1d(self.results.depth.isel(t=i).values,self.results[var_name].isel(t=i).values)
+            f = interpolate.interp1d(self.results.z.isel(t=i).values*self.p['z0'],self.results[var_name].isel(t=i).values, bounds_error = False)
             interpolated_values[i] =f(depth_to_interp)
 
 
@@ -560,7 +570,7 @@ class fcm:
         import numpy as np
         import xarray as xr
        
-        z_q = np.linspace(0,self.p['z0']*1.2,round(self.p['N']*1.2))   # query points for interpolation
+        z_q = np.linspace(0,1.2,round(self.p['N']*1.2))   # query points for interpolation
         Nz = len(z_q)
         Nt = len(self.results.t.values)
         interpolated_values = np.empty((Nz,Nt))
@@ -590,8 +600,8 @@ class fcm:
 
         self.results.t.attrs = t_attrs
 
-        new_name_for_xarray = name_for_new_var + '(regular)'
-        new_long_name_for_xarray = name_for_new_var + 'regular grid'
+        new_name_for_xarray = self.results[var_name].attrs['name'] + ' (regular)'
+        new_long_name_for_xarray = self.results[var_name].attrs['long_name'] + ' (regular grid)'
 
         self.results[name_for_new_var].attrs = dict(name=new_name_for_xarray, 
             long_name=new_long_name_for_xarray,
