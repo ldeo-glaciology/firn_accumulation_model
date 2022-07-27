@@ -523,7 +523,7 @@ class fcm:
         '''
         
         import warnings
-        warnings.warn('This method is outdated. You are better off applying fcm.interp_regular_z to the variable you are interested to interpolate it on to a regular vertical grid.')
+        warnings.warn('This method is outdated. You are better off applying fcm.interp_regular_z to the variable you are interested in, to interpolate it on to a regular vertical grid.')
 
         from scipy import interpolate
         import numpy as np
@@ -563,7 +563,7 @@ class fcm:
 
         Use
         >>> sim.interp_regular_z(var_name = 'A')
-        This will produce a new variabel called A_r and a new dimension cooridnate called z. 
+        This will produce a new variable called A_r and a new dimension cooridnate called z_r. 
         '''
       
         from scipy import interpolate
