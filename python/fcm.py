@@ -258,7 +258,7 @@ class fcm:
         elapsed_time = et - st    # get exectuion time
         if self.p['print_messages']:
             if sol.status == 0:
-                print('*** Succesfully finished integration in ', elapsed_time, 'seconds.')
+                print(f"*** Succesfully finished integration in  {elapsed_time:.3} seconds.")
             else:
                 warnings.warn('*** Integrator failed to find a solution.')
         
