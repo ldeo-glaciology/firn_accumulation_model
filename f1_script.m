@@ -25,7 +25,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 clear 
 figure(1)
 clf
-tiledlayout(1,2,'TileSpacing','none','padding','normal')
+tiledlayout(1,2,'TileSpacing','compact','padding','normal')
 set(gcf,'pos',[ 57   429   794   331])
 ax1 = nexttile;
 ax2 = nexttile;
@@ -96,7 +96,8 @@ contourf(ax1,T_s_dim,b_mpy,(Ar),'ShowText','on')
 set(ax1,'YDir','normal','YScale','log')
 ylabel(ax1,'surface accmulation scale, $b_0$ [m yr$^{-1}]$','interpreter','latex');
 xlabel(ax1,'surface temperature, $T_s$ [K]','interpreter','latex');
-title(ax1,'compaction number, $\alpha$','FontSize',15)
+title_a = title(ax1,'compaction number, $\alpha$','FontSize',15);
+title_b.Position(2) = 1.1;
 ylim(ax1,[1e-2, 1])
 xlim(ax1,[233 273.15])
 
@@ -104,7 +105,8 @@ xlim(ax1,[233 273.15])
 contourf(ax2,T_s_dim,b_mpy,log10(delta),'ShowText','on')
 set(ax2,'YDir','normal','YScale','log')
 xlabel('surface temperature, $T_s$ [K]','interpreter','latex');
-title(ax2,'logarithm of grain size saturation ratio, log$_{10}\delta$','FontSize',15)
+title_b = title(ax2,'logarithm of grain size saturation ratio, log$_{10}\delta$','FontSize',15);
+title_b.Position(2) = 1.1;
 ylim([1e-2, 1])
 xlim([233 273.15])
 
@@ -119,8 +121,8 @@ ax2.YAxis.FontSize = 12;
 ax2.YLabel.FontSize = 15;
 
 % add panel labels
-text(ax1,-0.08,1.06,'a','units','normalized','FontSize',20)
-text(ax2,-0.08,1.06,'b','units','normalized','FontSize',20)
+text(ax1,-0.1,1.06,'a','units','normalized','FontSize',20)
+text(ax2,-0.1,1.06,'b','units','normalized','FontSize',20)
 
 %% 5. print figure
 print('-dpng','figures/f1.png') 

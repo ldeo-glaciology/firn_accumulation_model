@@ -21,7 +21,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 clear
 figure(6)
 clf
-tiledlayout(1,3,'TileSpacing','none','padding','none')
+tiledlayout(1,3,'TileSpacing','compact','padding','none')
 set(gcf,'pos',[ 57         436        1069         324])
 ax1 = nexttile;
 ax2 = nexttile;
@@ -78,9 +78,9 @@ ylabel(ax3,'surface grain size, $r^2_s$')
 xlabel(ax3,'accumulation rate, $\beta$')
 
 % add titles
-title(ax1,'full model','FontSize',18)
-title(ax2,'ODE model (Eqn 26) with $\sigma = -z$','FontSize',18)
-title(ax3,'ODE model (Eqn 27) with $\sigma = -z; w = \beta$','FontSize',18)
+title(ax1,'full model','FontSize',16)
+title(ax2,'ODE model (Eqn 26) with $\sigma = -z$','FontSize',16)
+title(ax3,'ODE model (Eqn 27) with $\sigma = -z; w = \beta$','FontSize',16)
 
 % make the color scale the same across panels and figures
 caxis(ax1,[0 1])

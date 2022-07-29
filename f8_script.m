@@ -12,7 +12,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 clear
 figure(8)
 clf
-tiledlayout(1,2,'TileSpacing','none','padding','none')
+tiledlayout(1,2,'TileSpacing','compact','padding','none')
 set(gcf,'pos',[  57   436   736   324])
 ax1 = nexttile;
 ax2 = nexttile;

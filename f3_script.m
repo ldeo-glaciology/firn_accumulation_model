@@ -18,7 +18,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 clear
 figure(3)
 clf
-tiledlayout(3,2,'TileSpacing','none','padding','none')
+tiledlayout(3,2,'TileSpacing','compact','padding','none')
 set(gcf,'pos',[57    84   717   676])
 ax1 = nexttile;    ylabel('porosity, $\phi(z)$')
 ax2 = nexttile;    ylabel('velocity, $w(z)$')
