@@ -27,9 +27,9 @@ ax4 = nexttile;    ylabel('velocity, $w(z)$')
 ax5 = nexttile;    ylabel('porosity, $\phi(z)$');  xlabel('depth, $z$ ');
 ax6 = nexttile;    ylabel('velocity, $w(z)$'); xlabel('depth, $z$ ');
 
-inset1 = axes('Position',[0.2718     0.8121    0.2031    0.1409]);
-inset2 = axes('Position',[0.2718     0.505    0.2031    0.1409]); 
-inset3 = axes('Position',[0.2718     0.18     0.2031    0.1409]);
+inset1 = axes('Position',[0.27     0.81    0.2031    0.1409]);
+inset2 = axes('Position',[0.27     0.495    0.2031    0.1409]); 
+inset3 = axes('Position',[0.27     0.178     0.2031    0.1409]);
 
 
 h1 = []; h2 = []; h3 = []; h4 = [];h5 = []; h6 = []; m1 = []; m2 = []; m3 = [];
@@ -155,12 +155,14 @@ title(ax5,'ODE model (Eqn 25) with $\sigma = -z$; $w = -\beta$','FontSize',15)
 title(ax6,'ODE model (Eqn 25) with $\sigma = -z$; $w = -\beta$','FontSize',15)
 
 % add panel labels
-text(ax1,-0.11,0.98,'a','units','normalized','FontSize',20)
-text(ax2,-0.11,0.98,'b','units','normalized','FontSize',20)
-text(ax3,-0.11,0.98,'c','units','normalized','FontSize',20)
-text(ax4,-0.11,0.98,'d','units','normalized','FontSize',20)
-text(ax5,-0.11,0.98,'e','units','normalized','FontSize',20)
-text(ax6,-0.11,0.98,'f','units','normalized','FontSize',20)
+panelLabelPos = [-0.15,1.05];
+
+text(ax1,panelLabelPos(1),panelLabelPos(2),'(a)','units','normalized','FontSize',20)
+text(ax2,panelLabelPos(1),panelLabelPos(2),'(b)','units','normalized','FontSize',20)
+text(ax3,panelLabelPos(1),panelLabelPos(2),'(c)','units','normalized','FontSize',20)
+text(ax4,panelLabelPos(1),panelLabelPos(2),'(d)','units','normalized','FontSize',20)
+text(ax5,panelLabelPos(1),panelLabelPos(2),'(e)','units','normalized','FontSize',20)
+text(ax6,panelLabelPos(1),panelLabelPos(2),'(f)','units','normalized','FontSize',20)
 
 % increase size of tick labels
 ax1 = axis_font_sizes(ax1,13,17);
@@ -171,9 +173,9 @@ ax5 = axis_font_sizes(ax5,13,17);
 ax6 = axis_font_sizes(ax6,13,17);
 
 % reposition insets
-inset1.Position(2) = ax1.Position(2)+0.12;
-inset2.Position(2) = ax3.Position(2)+0.12;
-inset3.Position(2) = ax5.Position(2)+0.12;
+inset1.Position(2) = ax1.Position(2)+0.11;
+inset2.Position(2) = ax3.Position(2)+0.11;
+inset3.Position(2) = ax5.Position(2)+0.11;
 
 set(inset1,'Color','none')
 

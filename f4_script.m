@@ -29,9 +29,9 @@ ax4 = nexttile;
 ax5 = nexttile;   
 ax6 = nexttile;    
 
-inset1 = axes('Position',[0.2718     0.826   0.2031    0.1409]);
-inset2 = axes('Position',[0.2718     0.505   0.2031    0.1409]);
-inset3 = axes('Position',[0.2718     0.18    0.2031   0.1409]);
+inset1 = axes('Position',[0.27     0.826   0.2031    0.1409]);
+inset2 = axes('Position',[0.27     0.505   0.2031    0.1409]);
+inset3 = axes('Position',[0.27     0.18    0.2031   0.1409]);
 
 %% 2. define beta and r_S
 % beta
@@ -169,13 +169,15 @@ title(ax4,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(2)),'%4.2
 title(ax5,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(3)),'%4.1f')],'FontSize',15)
 title(ax6,['Full model, evolving grain-size: $r_s^2$ = ' num2str(r_s(I(3)),'%4.1f')],'FontSize',15)
 
-% label panels
-text(ax1,-0.11,1,'a','units','normalized','FontSize',20)
-text(ax2,-0.11,1,'b','units','normalized','FontSize',20)
-text(ax3,-0.11,1,'c','units','normalized','FontSize',20)
-text(ax4,-0.11,1,'d','units','normalized','FontSize',20)
-text(ax5,-0.11,1,'e','units','normalized','FontSize',20)
-text(ax6,-0.11,1,'f','units','normalized','FontSize',20)
+% add panel labels
+panelLabelPos = [-0.15,1.05];
+
+text(ax1,panelLabelPos(1),panelLabelPos(2),'(a)','units','normalized','FontSize',20)
+text(ax2,panelLabelPos(1),panelLabelPos(2),'(b)','units','normalized','FontSize',20)
+text(ax3,panelLabelPos(1),panelLabelPos(2),'(c)','units','normalized','FontSize',20)
+text(ax4,panelLabelPos(1),panelLabelPos(2),'(d)','units','normalized','FontSize',20)
+text(ax5,panelLabelPos(1),panelLabelPos(2),'(e)','units','normalized','FontSize',20)
+text(ax6,panelLabelPos(1),panelLabelPos(2),'(f)','units','normalized','FontSize',20)
 
 % change size of tick labels
 ax1 = axis_font_sizes(ax1,13,17);
@@ -189,6 +191,9 @@ ax6 = axis_font_sizes(ax6,13,17);
 inset1.Position(2) = ax1.Position(2)+0.12;
 inset2.Position(2) = ax3.Position(2)+0.12;
 inset3.Position(2) = ax5.Position(2)+0.12;
+
+
+
 
 set(gcf,'Color','w')
 

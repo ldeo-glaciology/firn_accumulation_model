@@ -121,8 +121,8 @@ ax2.YAxis.FontSize = 12;
 ax2.YLabel.FontSize = 15;
 
 % add panel labels
-text(ax1,-0.1,1.06,'a','units','normalized','FontSize',20)
-text(ax2,-0.1,1.06,'b','units','normalized','FontSize',20)
+text(ax1,-0.18,1.06,'(a)','units','normalized','FontSize',20)
+text(ax2,-0.18,1.06,'(b)','units','normalized','FontSize',20)
 
 %% 5. print figure
 print('-dpng','figures/f1.png') 
