@@ -65,7 +65,7 @@ class Intro(VScene):
             self.play(tau.look_at(stack), run_time=0.5)
             self.play(tau.blink())
         bub, anim = tau.says(r"More snow $\Rightarrow$ thicker firn.\\Obviously!", mood="happy")
-        with self.vo("More snow on top, more firn. Thicker. Right?") as tr:
+        with self.vo("Pile more snow on top, and surely you get a thicker layer of firn. Right?") as tr:
             self.play(anim, run_time=1.2)
             self.play(Indicate(thick, color=C_PHI))
 
