@@ -122,8 +122,6 @@ MODEL_DIR = os.environ.get("KOKORO_DIR", "/home/user/tts_models")
 
 # spelling tweaks so the British espeak front-end says technical words properly
 PRONOUNCE = [
-    (r"\bfirn\b", "feern"),
-    (r"\bFirn\b", "Feern"),
     (r"\bEulerian\b", "Oilerian"),
     (r"\bLagrangian\b", "Lagrahnjian"),
     (r"\bArrhenius\b", "Arreenius"),
