@@ -4,7 +4,7 @@ import numpy as np, soundfile as sf
 from scipy.signal import resample_poly
 from faster_whisper import WhisperModel
 
-m = WhisperModel("small.en", device="cpu", compute_type="int8", cpu_threads=1)
+m = WhisperModel("small.en", device="cpu", compute_type="int8", cpu_threads=4)
 done = {}
 if os.path.exists("test/audio_check.json"):
     done = json.load(open("test/audio_check.json"))

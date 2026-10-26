@@ -69,11 +69,11 @@ class Intro(VScene):
             self.play(anim, run_time=1.2)
             self.play(Indicate(thick, color=C_PHI))
 
-        mag_center = np.array([4.6, -1.6, 0])
+        mag_center = np.array([5.5, -2.3, 0])
         disc = Circle(radius=1.35).move_to(mag_center).set_fill("#20384F", 1).set_stroke(WHITE, 3)
         grains = grain_cluster(radius=1.25, porosity=0.55).move_to(mag_center)
-        src = stack[2].get_center() + RIGHT * 0.6
-        connector = Line(src, disc.point_at_angle(PI * 0.8), color=WHITE, stroke_width=2)
+        src = stack[9].get_right() + LEFT * 0.3
+        connector = Line(src, disc.get_left(), color=WHITE, stroke_width=2)
         dot = Dot(src, radius=0.06)
         with self.vo("Well, it turns out the answer depends, rather surprisingly, on something much smaller: "
                      "the size of the individual snow grains.") as tr:

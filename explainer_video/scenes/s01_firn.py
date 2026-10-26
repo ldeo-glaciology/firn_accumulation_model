@@ -63,9 +63,9 @@ class WhatIsFirn(VScene):
         sat_body = Rectangle(width=0.5, height=0.35).set_fill(GREY_B, 1).set_stroke(WHITE, 1)
         panels = VGroup(*[Rectangle(width=0.7, height=0.25).set_fill("#2E5C8A", 1).set_stroke(WHITE, 1).next_to(sat_body, s, buff=0.05)
                           for s in [LEFT, RIGHT]])
-        sat = VGroup(sat_body, panels).move_to([5.5, 3.2, 0])
-        beam = DashedLine(sat.get_bottom(), [5.5, 0.4, 0], color=YELLOW, stroke_width=2)
-        alt_lab = Text("satellite altimetry", font="CMU Serif", font_size=24).next_to(sat, DOWN, buff=0.2).shift(RIGHT * 0.9)
+        sat = VGroup(sat_body, panels).move_to([5.4, 3.1, 0])
+        beam = DashedLine(sat.get_bottom(), [5.4, 0.4, 0], color=YELLOW, stroke_width=2)
+        alt_lab = Text("satellite altimetry", font="CMU Serif", font_size=24).next_to(sat, UP, buff=0.12)
         with self.vo("Those bubbles are a big part of why firn matters. They're tiny samples of ancient atmosphere, "
                      "and to interpret them in an ice core, you need to know how deep the firn was when they were sealed in. "
                      "And when satellites measure the height of an ice sheet, to work out whether it's gaining or losing mass, "

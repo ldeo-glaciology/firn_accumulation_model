@@ -43,7 +43,11 @@ for f, c in SCENES:
     if not os.path.exists(p):
         print("missing", p)
         continue
-    lst.append(f"file '{os.path.abspath(p)}'")
+    # pad each chapter's audio to its video length so the concatenated tracks stay in sync
+    padded = os.path.abspath(f"output/seg_{f}.mp4")
+    subprocess.check_call(["ffmpeg", "-v", "error", "-y", "-i", p, "-c:v", "copy", "-af", "apad", "-shortest",
+                           "-c:a", "aac", "-b:a", "192k", "-ar", "48000", padded])
+    lst.append(f"file '{padded}'")
     srt = p[:-4] + ".srt"
     if os.path.exists(srt):
         for a, b, t in parse_srt(srt):
@@ -66,10 +70,12 @@ with open(srt_out, "w") as fh:
         fh.write(f"{i}\n{ts(a)} --> {ts(b)}\n" + "\n".join(lines) + "\n\n")
 tmp = out[:-4] + "_nosub.mp4"
 subprocess.check_call(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", "output/list.txt",
-                       "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", tmp])
+                       "-c", "copy", tmp])
 subprocess.check_call(["ffmpeg", "-v", "error", "-y", "-i", tmp, "-i", srt_out, "-map", "0", "-map", "1",
                        "-c", "copy", "-c:s", "mov_text", "-metadata:s:s:0", "language=eng", "-movflags", "+faststart", out])
 os.remove(tmp)
+for line in lst:
+    os.remove(line[6:-1])
 print(f"{out}: {offset/60:.1f} min, {len(subs)} captions")
 for t, c in chapters:
     print(f"  {int(t//60):02d}:{int(t%60):02d}  {c}")
